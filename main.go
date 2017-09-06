@@ -52,7 +52,7 @@ func main() {
 
 	signal.Notify(signalChannel, syscall.SIGINT, syscall.SIGTERM)
 	<-signalChannel
-	fmt.Print("gomonitor terminated")
+	fmt.Print("\ngomonitor terminated")
 }
 
 func check(services <-chan service, wg *sync.WaitGroup) {
