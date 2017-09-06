@@ -1,8 +1,12 @@
 # GoMonitor
 
+## Usage
 go build
+
 gomonitor -h www.google.com -t 5 -s 30 -m get
 
+
+## Flags
 | Flags | Description                                 |
 |:-----:| --------------------------------------------|
 | h     | hostname                                    |
