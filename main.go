@@ -13,8 +13,8 @@ import (
 )
 
 type service struct {
-	hostname string
-	method   string
+	url    string
+	method string
 }
 
 func main() {
@@ -36,8 +36,8 @@ func main() {
 		for {
 			wg.Add(1)
 			services <- service{
-				hostname: *url,
-				method:   *method}
+				url:    *url,
+				method: *method}
 			wg.Wait()
 			if *repeat > 0 {
 				i++
@@ -68,11 +68,11 @@ func check(services <-chan service, wg *sync.WaitGroup) {
 			if err != nil {
 				fmt.Printf(
 					"an error ocurred making the request to %s | error: %v\n",
-					s.hostname, err)
+					s.url, err)
 			} else {
 				fmt.Printf(
 					"url: %s | method: %s | response time: %f | HTTP Status: %s\n",
-					s.hostname, strings.ToUpper(s.method), elapsed, statusCode)
+					s.url, strings.ToUpper(s.method), elapsed, statusCode)
 			}
 			wg.Done()
 		}
@@ -85,9 +85,9 @@ func makeRequest(s service) (string, error) {
 	method := strings.ToUpper(s.method)
 
 	if method == http.MethodGet {
-		resp, err = http.Get(s.hostname)
+		resp, err = http.Get(s.url)
 	} else if method == http.MethodPost {
-		resp, err = http.Post(s.hostname, "text/plain", strings.NewReader(""))
+		resp, err = http.Post(s.url, "text/plain", strings.NewReader(""))
 	}
 
 	if err != nil {
