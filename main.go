@@ -18,9 +18,9 @@ type service struct {
 }
 
 func main() {
-	hostname := flag.String("h", "", "hostname of the services to check")
-	times := flag.Int(
-		"t", 0, "number of times the monitor will check the services")
+	url := flag.String("u", "", "url of the services to check")
+	repeat := flag.Int(
+		"r", 0, "number of times the monitor will check the services")
 	seconds := flag.Int("s", 60, "seconds to wait between check")
 	method := flag.String("m", "GET", "HTTP request method to use")
 	flag.Parse()
@@ -36,14 +36,14 @@ func main() {
 		for {
 			wg.Add(1)
 			services <- service{
-				hostname: *hostname,
+				hostname: *url,
 				method:   *method}
 			wg.Wait()
-			if *times > 0 {
+			if *repeat > 0 {
 				i++
-				if i == *times {
+				if i == *repeat {
 					close(services)
-					signalChannel <- syscall.SIGTERM
+					signalChannel <- syscall.SIGINT
 				}
 			}
 			time.Sleep(time.Duration(*seconds) * time.Second)
@@ -71,7 +71,7 @@ func check(services <-chan service, wg *sync.WaitGroup) {
 					s.hostname, err)
 			} else {
 				fmt.Printf(
-					"Hostname: %s | Method: %s | Response time: %f | HTTP Status: %s\n",
+					"url: %s | method: %s | response time: %f | HTTP Status: %s\n",
 					s.hostname, strings.ToUpper(s.method), elapsed, statusCode)
 			}
 			wg.Done()
