@@ -1,0 +1,6 @@
+{
+	"url": "http://www.google.com",
+	"repeat": "4",
+	"seconds": "30",
+	"method": "GET"
+}
