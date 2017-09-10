@@ -73,7 +73,7 @@ func main() {
 				i++
 				if i == r {
 					close(services)
-					signalChannel <- syscall.SIGTERM
+					signalChannel <- syscall.SIGINT
 				}
 			}
 			time.Sleep(time.Duration(s) * time.Second)
@@ -101,7 +101,7 @@ func check(services <-chan service, wg *sync.WaitGroup) {
 					s.url, err)
 			} else {
 				fmt.Printf(
-					"url: %s | Method: %s | Response time: %f | HTTP Status: %s\n",
+					"url: %s | method: %s | response time: %f | HTTP Status: %s\n",
 					s.url, strings.ToUpper(s.method), elapsed, statusCode)
 			}
 			wg.Done()
